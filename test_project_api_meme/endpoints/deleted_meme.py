@@ -7,6 +7,7 @@ class DeleteMeme(Endpoint):
 
     @allure.step('Delete meme')
     def delete_meme(self, created_meme_id):
+
         self.response = requests.delete(f"{self.url}/{created_meme_id}", headers=self.headers)
 
         # Если не передан created_meme_id, то указываем None.

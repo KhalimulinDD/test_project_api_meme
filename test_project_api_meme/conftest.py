@@ -1,12 +1,13 @@
 import pytest
 import random
 import string
+from endpoints.endpoint import Endpoint
 from endpoints.getting_token import GetToken
-from endpoints.verification_token import ExaminationToken
 from endpoints.created_meme import CreateMeme
 from endpoints.deleted_meme import DeleteMeme
-from endpoints.endpoint import Endpoint
+from endpoints.getting_one_memes import GettingOneMeme
 from endpoints.getting_all_memes import GettingAllMemes
+from endpoints.verification_token import ExaminationToken
 
 
 @pytest.fixture()
@@ -22,6 +23,11 @@ def exam_token_endpoint():
 @pytest.fixture()
 def get_all_memes_endpoint():
     return GettingAllMemes()
+
+
+@pytest.fixture()
+def get_one_meme_endpoint():
+    return GettingOneMeme()
 
 
 @pytest.fixture()
@@ -99,7 +105,7 @@ def create_invalid_token(create_meme_endpoint):
 
 @pytest.fixture()
 def get_meme_id_of_another_user(get_all_memes_endpoint):
-    """Фикстура для получения meme_id созданного другим пользователем"""
+    """Фикстура для получения meme_id, созданного другим пользователем"""
     # Создаем объект класса
     getting_memes = GettingAllMemes()
 
@@ -107,6 +113,21 @@ def get_meme_id_of_another_user(get_all_memes_endpoint):
     getting_memes.getting_all_memes()
 
     # Получаем случайный id, который не имеет KhalimulinDD в updated_by
+    random_meme_id = getting_memes.get_random_stranger_meme_id()
+
+    return random_meme_id
+
+
+@pytest.fixture()
+def getting_your_meme_id(get_all_memes_endpoint):
+    """Фикстура для получения meme_id, созданного носителем токена из заголовка"""
+    # Создаем объект класса
+    getting_memes = GettingAllMemes()
+
+    # Получаем все мемы
+    getting_memes.getting_all_memes()
+
+    # Получаем случайный id, который имеет KhalimulinDD в updated_by
     random_meme_id = getting_memes.get_random_meme_id()
 
     return random_meme_id

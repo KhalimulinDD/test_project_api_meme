@@ -18,8 +18,8 @@ def test_delete_meme(update_token, create_meme_fixture, delete_meme_endpoint):
 
 @allure.feature('Delete meme no identifier')
 @allure.story('Implementation of memes')
-@allure.title('Удаление мема')
-@allure.description('Данный тест выполняет успешное удаление мема')
+@allure.title('Удаление мема без идентификатора')
+@allure.description('Данный тест выполняет попытку удаление мема без указания идентификатора')
 @pytest.mark.negative
 def test_delete_meme_no_identifier(update_token, delete_meme_endpoint):
 
