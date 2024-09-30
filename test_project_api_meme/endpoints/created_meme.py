@@ -36,9 +36,17 @@ class CreateMeme(Endpoint):
                         CONTENT: {self.response.content}
                     """
         print(log)
-        print(f'\nСоздание мема {self.response.json()}')
-        self.json = self.response.json()
-        self.meme_id = self.json['id']
+
+        # Проверяем, что ответ содержит JSON, прежде чем пытаться его декодировать
+        try:
+            self.json = self.response.json()
+        except requests.exceptions.JSONDecodeError:
+            print("Ошибка: ответ не содержит корректный JSON.")
+            print("Ответ сервера:", self.response.text)
+            return None
+
+        self.meme_id = self.json.get('id')
+
         return self.meme_id
 
     @staticmethod
@@ -54,8 +62,8 @@ class CreateMeme(Endpoint):
     # Функция для создания вариаций с негативными данными
     def generate_invalid_data(self, field, invalid_value):
         """Генерирует JSON с заменой одного поля на невалидное значение."""
-        data = copy.deepcopy(self.data_body())  # Используем глубокую копию, чтобы не изменить оригинал
-        keys = field.split(".")  # Поддержка вложенных полей
+        data = copy.deepcopy(self.data_body())  # Используем копию, чтобы не изменить оригинал
+        keys = field.split(".")
         obj = data
         for key in keys[:-1]:
             obj = obj.get(key, {})
