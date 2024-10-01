@@ -1,6 +1,6 @@
 import allure
 import pytest
-from endpoints.created_meme import CreateMeme
+from endpoints.endpoint import Endpoint
 
 
 @allure.feature('Create meme')
@@ -8,7 +8,7 @@ from endpoints.created_meme import CreateMeme
 @allure.title('Создание мема')
 @allure.description('Данный тест выполняет создание мема с валидными данными')
 @pytest.mark.smoke
-def test_create_meme(update_token, create_meme_endpoint, cleanup_meme_fixture, request):
+def test_create_meme(examination_and_update_token, create_meme_endpoint, cleanup_meme_fixture, request):
 
     # Создание мема
     request.function.meme_id = create_meme_endpoint.create_new_meme()
@@ -24,10 +24,10 @@ def test_create_meme(update_token, create_meme_endpoint, cleanup_meme_fixture, r
     'Данный тест выполняет создание мема без указания обязательных полей или некорректным типом данных'
 )
 @pytest.mark.negative
-@pytest.mark.parametrize('field, invalid_value', CreateMeme.invalid_scenarios)
-def test_create_meme_incorrect_data(update_token, create_meme_endpoint, field, invalid_value):
+@pytest.mark.parametrize('field, invalid_value', Endpoint.invalid_scenarios)
+def test_create_meme_incorrect_data(examination_and_update_token, create_meme_endpoint, field, invalid_value):
 
-    generator = CreateMeme()
+    generator = Endpoint()
     invalid_data = generator.generate_invalid_data(field, invalid_value)
 
     # Создание мема

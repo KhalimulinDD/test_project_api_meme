@@ -28,11 +28,3 @@ class DeleteMeme(Endpoint):
         print(log)
         print(f"\nУдаление мема с ID: {created_meme_id}, Статус ответа: {self.response.status_code}")
         return self.response
-
-    @allure.step('Check that response is 404')
-    def check_that_status_is_404(self):
-        assert self.response.status_code == 404
-
-    @allure.step('Check that response is 403')
-    def check_that_status_is_403(self):
-        assert self.response.status_code == 403

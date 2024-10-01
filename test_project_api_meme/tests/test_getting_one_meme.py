@@ -7,7 +7,7 @@ import pytest
 @allure.title('Получение своего мема')
 @allure.description('Данный тест выполняет успешное получение мема, созданного носителем токена из заголовка')
 @pytest.mark.smoke
-def test_getting_one_your_meme(update_token, getting_your_meme_id, get_one_meme_endpoint):
+def test_getting_one_your_meme(examination_and_update_token, getting_your_meme_id, get_one_meme_endpoint):
 
     # Получаем один мем созданый носителем токена в заголовке
     get_one_meme_endpoint.getting_one_meme(meme_id=getting_your_meme_id)
@@ -21,7 +21,7 @@ def test_getting_one_your_meme(update_token, getting_your_meme_id, get_one_meme_
 @allure.title('Получение мема чужого пользователя')
 @allure.description('Данный тест выполняет успешное получение мема, созданного другим пользователем')
 @pytest.mark.smoke
-def test_getting_one_another_meme(update_token, get_meme_id_of_another_user, get_one_meme_endpoint):
+def test_getting_one_another_meme(examination_and_update_token, get_meme_id_of_another_user, get_one_meme_endpoint):
 
     # Получаем один мем созданый другим пользователем
     get_one_meme_endpoint.getting_one_meme(meme_id=get_meme_id_of_another_user)

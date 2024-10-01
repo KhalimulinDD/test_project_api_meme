@@ -1,25 +1,22 @@
 import requests
 import allure
-import os
 from endpoints.endpoint import Endpoint
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
-class GetToken(Endpoint):
+@allure.step('Изменение мема')
+class UpdateMeme(Endpoint):
+    meme_id = None
 
-    token = None
+    def update_meme(self, meme_id=None, payload=None):
 
-    @allure.step('Получение токена авторизации')
-    def get_new_token(self, payload=None):
-
+        # Если не передан payload, генерируем случайные данные.
         if payload is None:
-            payload = {"name": os.getenv('LOGIN')}
+            payload = self.data_body(self.random_type)
 
-        self.response = requests.post(
-            self.url_authorize,
-            json=payload
+        self.response = requests.put(
+            f'{self.url}/{meme_id}',
+            json=payload,
+            headers=self.headers
         )
         log = f"""
                     REQUEST:
@@ -42,6 +39,10 @@ class GetToken(Endpoint):
             print("Ответ сервера:", self.response.text)
             return None
 
-        self.token = self.json['token']
+        self.meme_id = self.json.get('id')
 
-        return self.token
+        return self.meme_id
+
+    @allure.step('Check that text is the same as sent')
+    def check_response_text_is_correct(self, text):
+        assert self.json['text'] == text

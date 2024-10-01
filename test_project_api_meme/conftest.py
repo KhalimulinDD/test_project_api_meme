@@ -1,7 +1,9 @@
 import pytest
 import random
 import string
+import requests
 from endpoints.endpoint import Endpoint
+from endpoints.update_meme import UpdateMeme
 from endpoints.getting_token import GetToken
 from endpoints.created_meme import CreateMeme
 from endpoints.deleted_meme import DeleteMeme
@@ -36,12 +38,17 @@ def create_meme_endpoint():
 
 
 @pytest.fixture()
+def update_meme_endpoint():
+    return UpdateMeme()
+
+
+@pytest.fixture()
 def delete_meme_endpoint():
     return DeleteMeme()
 
 
 @pytest.fixture()
-def update_token(get_token_endpoint, exam_token_endpoint):
+def examination_and_update_token(get_token_endpoint, exam_token_endpoint):
     """Фикстура для проверки и обновления токена перед выполнением теста"""
     # Проверка существующего токена
     if Endpoint.headers.get("Authorization"):
@@ -64,6 +71,21 @@ def update_token(get_token_endpoint, exam_token_endpoint):
     Endpoint.headers['Authorization'] = token
 
     print(f"Токен обновлен в заголовках: {Endpoint.headers['Authorization']}")
+
+
+@pytest.fixture()
+def update_token(get_token_endpoint):
+    """Фикстура для обновления токена перед выполнением теста"""
+    # Выполняем получение токена
+    token = get_token_endpoint.get_new_token()
+
+    # Обновляем токен в заголовках класса Endpoint
+    Endpoint.token = token
+    Endpoint.headers['Authorization'] = token
+
+    print(f"Токен обновлен в заголовках: {Endpoint.headers['Authorization']}")
+
+    return token
 
 
 @pytest.fixture()
@@ -90,6 +112,61 @@ def remove_token_from_headers():
 
     endpoint.headers.pop('Authorization', None)
     return endpoint
+
+
+@pytest.fixture()
+def create_and_update_meme_without_token(update_meme_endpoint, create_meme_endpoint, delete_meme_endpoint):
+    """Фикстура для создания мема, попытки изменения без токена и удаления мема с восстановлением токена"""
+
+    # Создание мема
+    created_meme_id = create_meme_endpoint.create_new_meme()
+
+    # Сохранение текущего токена
+    saved_token = Endpoint.headers.get('Authorization')
+
+    # Удаление токена (установка None в заголовок)
+    Endpoint.headers.pop('Authorization', None)
+
+    # Возвращаем управление тесту
+    yield created_meme_id, saved_token
+
+    # Восстановление токена и удаление мема
+    if saved_token:
+        Endpoint.headers['Authorization'] = saved_token  # Восстанавливаем токен
+
+    # Удаление мема после теста
+    delete_meme_endpoint.delete_meme(created_meme_id=created_meme_id)
+
+
+@pytest.fixture()
+def create_and_update_meme_invalid_token(
+        update_meme_endpoint, create_meme_endpoint, delete_meme_endpoint
+):
+    """
+    Фикстура для создания мема, попытки изменения с несуществующим токеном и удаления мема с восстановлением токена.
+    """
+
+    # Создание мема
+    created_meme_id = create_meme_endpoint.create_new_meme()
+
+    # Сохранение текущего токена
+    saved_token = Endpoint.headers.get('Authorization')
+
+    # Генерация случайного токена длиной 10 символов
+    random_token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+
+    # Устанавливаем сгенерированный токен
+    Endpoint.headers['Authorization'] = random_token  # Устанавливаем несуществующий токен
+
+    # Возвращаем управление тесту
+    yield created_meme_id, saved_token
+
+    # Восстановление токена и удаление мема
+    if saved_token:
+        Endpoint.headers['Authorization'] = saved_token  # Восстанавливаем токен
+
+    # Удаление мема после теста
+    delete_meme_endpoint.delete_meme(created_meme_id=created_meme_id)
 
 
 @pytest.fixture
