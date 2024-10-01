@@ -7,7 +7,7 @@ import pytest
 @allure.title('Удаление мема')
 @allure.description('Данный тест выполняет успешное удаление мема')
 @pytest.mark.smoke
-def test_delete_meme(update_token, create_meme_fixture, delete_meme_endpoint):
+def test_delete_meme(examination_and_update_token, create_meme_fixture, delete_meme_endpoint):
 
     # Удаляем мем
     delete_meme_endpoint.delete_meme(created_meme_id=create_meme_fixture)
@@ -18,10 +18,10 @@ def test_delete_meme(update_token, create_meme_fixture, delete_meme_endpoint):
 
 @allure.feature('Delete meme no identifier')
 @allure.story('Implementation of memes')
-@allure.title('Удаление мема')
-@allure.description('Данный тест выполняет успешное удаление мема')
+@allure.title('Удаление мема без идентификатора')
+@allure.description('Данный тест выполняет попытку удаление мема без указания идентификатора')
 @pytest.mark.negative
-def test_delete_meme_no_identifier(update_token, delete_meme_endpoint):
+def test_delete_meme_no_identifier(examination_and_update_token, delete_meme_endpoint):
 
     # Удаляем мем
     delete_meme_endpoint.delete_meme(created_meme_id=None)
@@ -35,7 +35,7 @@ def test_delete_meme_no_identifier(update_token, delete_meme_endpoint):
 @allure.title('Удаление мема другого пользователя')
 @allure.description('Данный тест выполняет попытку удаление мема созданного другим пользователем')
 @pytest.mark.negative
-def test_delete_another_user_meme(update_token, get_meme_id_of_another_user, delete_meme_endpoint):
+def test_delete_another_user_meme(examination_and_update_token, get_meme_id_of_another_user, delete_meme_endpoint):
 
     # Удаляем мем
     delete_meme_endpoint.delete_meme(created_meme_id=get_meme_id_of_another_user)

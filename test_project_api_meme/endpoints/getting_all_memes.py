@@ -49,9 +49,35 @@ class GettingAllMemes(Endpoint):
         # Возвращаем не более 10 идентификаторов
         return meme_ids[:limit]
 
-    def get_random_meme_id(self, excluded_user="KhalimulinDD"):
+    def get_random_stranger_meme_id(self, excluded_user="KhalimulinDD"):
         """Получение случайного id для теста на удаление"""
         meme_ids = self.get_meme_ids_without_updated_by(excluded_user)
+
+        if not meme_ids:
+            print("Ошибка: не удалось получить идентификаторы мемов для удаления.")
+            return None
+
+        # Возвращаем случайный id
+        return random.choice(meme_ids)
+
+    def get_meme_ids_with_updated_by(self, excluded_user="KhalimulinDD", limit=10):
+        """Метод для получения 10 id, где updated_by равно excluded_user"""
+        if not hasattr(self, 'json') or 'data' not in self.json:
+            print("Ошибка: JSON не содержит ожидаемых данных.")
+            return []
+
+        # Фильтруем мемы по условию updated_by = 'KhalimulinDD'
+        meme_ids = [
+            meme['id'] for meme in self.json['data']
+            if meme.get('updated_by') == excluded_user
+        ]
+
+        # Возвращаем не более 10 идентификаторов
+        return meme_ids[:limit]
+
+    def get_random_meme_id(self, excluded_user="KhalimulinDD"):
+        """Получение случайного id для теста на получение одного мема"""
+        meme_ids = self.get_meme_ids_with_updated_by(excluded_user)
 
         if not meme_ids:
             print("Ошибка: не удалось получить идентификаторы мемов для удаления.")

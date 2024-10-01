@@ -1,36 +1,30 @@
 import requests
 import allure
-import os
+import random
 from endpoints.endpoint import Endpoint
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
-class GetToken(Endpoint):
+@allure.step('Получение одного мема')
+class GettingOneMeme(Endpoint):
 
-    token = None
+    def getting_one_meme(self, meme_id=None):
 
-    @allure.step('Получение токена авторизации')
-    def get_new_token(self, payload=None):
+        # Если не передан meme_id, генерируем случайные данные.
+        if meme_id is None:
+            meme_id = random.randint(1, 100)
 
-        if payload is None:
-            payload = {"name": os.getenv('LOGIN')}
-
-        self.response = requests.post(
-            self.url_authorize,
-            json=payload
+        self.response = requests.get(
+            f'{self.url}/{meme_id}',
+            headers=self.headers
         )
         log = f"""
                     REQUEST:
                         URL: {self.response.request.url}
                         METHOD: {self.response.request.method}
-                        JSON:   {self.response.request.body}
                         HEADERS: {self.response.request.headers}
 
                     RESPONSE:    
                         STATUS_CODE: {self.response.status_code}
-                        CONTENT: {self.response.content}
                     """
         print(log)
 
@@ -42,6 +36,4 @@ class GetToken(Endpoint):
             print("Ответ сервера:", self.response.text)
             return None
 
-        self.token = self.json['token']
-
-        return self.token
+        return self.response

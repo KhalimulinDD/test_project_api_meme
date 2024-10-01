@@ -7,7 +7,7 @@ import pytest
 @allure.title('Получение всех мемов')
 @allure.description('Данный тест выполняет успешное получение всех мемов')
 @pytest.mark.smoke
-def test_getting_all_memes(update_token, get_all_memes_endpoint):
+def test_getting_all_memes(examination_and_update_token, get_all_memes_endpoint):
 
     # Получаем все мемы
     get_all_memes_endpoint.getting_all_memes()
