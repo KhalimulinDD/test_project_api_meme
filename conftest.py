@@ -1,7 +1,6 @@
 import pytest
 import random
 import string
-import requests
 from endpoints.endpoint import Endpoint
 from endpoints.update_meme import UpdateMeme
 from endpoints.getting_token import GetToken
@@ -64,7 +63,7 @@ def examination_and_update_token(get_token_endpoint, exam_token_endpoint):
 
     # Если токен не существует или не валиден, получаем новый токен
     print("Токен отсутствует или не валиден. Получаем новый токен...")
-    token = get_token_endpoint.get_new_token()
+    token = get_token_endpoint.get_new_token().json()['token']
 
     # Обновляем токен в заголовках класса Endpoint
     Endpoint.token = token
@@ -77,7 +76,7 @@ def examination_and_update_token(get_token_endpoint, exam_token_endpoint):
 def update_token(get_token_endpoint):
     """Фикстура для обновления токена перед выполнением теста"""
     # Выполняем получение токена
-    token = get_token_endpoint.get_new_token()
+    token = get_token_endpoint.get_new_token().json()['token']
 
     # Обновляем токен в заголовках класса Endpoint
     Endpoint.token = token
@@ -177,7 +176,7 @@ def create_invalid_token(create_meme_endpoint):
 
     # Устанавливаем сгенерированый токен
     create_meme_endpoint.headers['Authorization'] = random_token
-    return create_meme_endpoint
+    yield create_meme_endpoint
 
 
 @pytest.fixture()
@@ -208,3 +207,22 @@ def getting_your_meme_id(get_all_memes_endpoint):
     random_meme_id = getting_memes.get_random_meme_id()
 
     return random_meme_id
+
+
+@pytest.fixture
+def check_empty_field(create_meme_endpoint, get_one_meme_endpoint):
+    """Фикстура для получения созданного обьекта, и проверки созданного пустого значения"""
+    def _check_empty_field(meme_id, field, expected_value):
+        # Получение данных созданного мема
+        created_meme = get_one_meme_endpoint.getting_one_meme(meme_id).json()
+
+        # Проходим по вложенным ключам, если они есть
+        keys = field.split(".")
+        obj = created_meme
+        for key in keys:
+            obj = obj.get(key, None)
+
+        # Проверка, что поле содержит ожидаемое пустое значение
+        assert obj == expected_value, f"Expected {field} to be '{expected_value}', but got '{obj}'"
+
+    return _check_empty_field

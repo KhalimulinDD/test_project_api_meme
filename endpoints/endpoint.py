@@ -51,13 +51,54 @@ class Endpoint:
     invalid_scenarios = [
         ("text", 12345),  # Неверный тип поля text
         ("text", None),  # Отсутствие обязательного поля text
+        ("text", ["Array", "Instead", "Of", "String"]),  # Неверный тип: массив вместо строки
+        ("text", {"object": "instead of string"}),  # Неверный тип: объект вместо строки
+
         ("url", 123),  # Неверный формат URL
         ("url", None),  # Отсутствие обязательного поля url
+        ("url", ["http://array.com", "http://instead.com"]),  # Массив вместо строки URL
+        ("url", {"object": "instead of URL"}),  # Объект вместо строки URL
+
         ("tags", "Super"),  # Неверный тип поля tags
         ("tags", None),  # Отсутствие обязательного поля tags
+        ("tags", "Invalid!@#$"),  # Тег содержит специальные символы
+        ("tags", {"object": "instead of array"}),  # Неверный тип: объект вместо массива
+
         ("info", "String"),  # Неверный тип поля info (строка вместо объекта)
-        ("info", None)  # Отсутствие обязательного поля info
+        ("info", None),  # Отсутствие обязательного поля info
+        ("info", ["Array", "Instead", "Of", "Object"]),  # Массив вместо объекта
+        ("info", 12345),  # Неверный тип: число вместо объекта
     ]
+
+    # Функция для создания вариаций с пустыми строками, массивами и обьектами
+    def generate_valid_data(self, field, valid_value):
+        """Генерирует JSON с заменой одного поля на пустую строку,массив или обьект"""
+        data = copy.deepcopy(self.data_body(self.random_type))  # Используем копию, чтобы не изменить оригинал
+        keys = field.split(".")
+        obj = data
+        for key in keys[:-1]:
+            obj = obj.get(key, {})
+        obj[keys[-1]] = valid_value
+        return data
+
+    # Параметры для тестирования (поля и пустые строки, массивы и обьекты)
+    valid_scenarios = [
+        ("text", ""),  # Пустая строка в поле text
+        ("text", "!#$%^&*()_+"),  # Спецсимволы в поле text
+
+        ("url", ""),  # Пустая строка в поле URL
+        ("url", "!#$%^&*()_+"),  # Спецсимволы в поле URL
+
+        ("tags", []),  # Пустой массив в поле tags
+        ("tags", ["!#$%^&*()_+"]),  # Спецсимволы в массиве поле tags
+
+        ("info", {}),  # Пустой обьект в поле info
+        ("info", {"special_characters": "!#$%^&*()_+"}),  # Спецсимволы в обьекте поля info
+    ]
+
+    @allure.step('Check that text is the same as sent')
+    def check_response_text_is_correct(self, text):
+        assert self.json['text'] == text
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):

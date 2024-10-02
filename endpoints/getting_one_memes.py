@@ -34,6 +34,10 @@ class GettingOneMeme(Endpoint):
         except requests.exceptions.JSONDecodeError:
             print("Ошибка: ответ не содержит корректный JSON.")
             print("Ответ сервера:", self.response.text)
-            return None
+            return self.response
 
         return self.response
+
+    @allure.step('Check that meme_id is the same as sent')
+    def check_response_id_is_correct(self, meme_id):
+        assert self.json['id'] == meme_id

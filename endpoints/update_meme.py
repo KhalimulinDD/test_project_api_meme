@@ -42,7 +42,3 @@ class UpdateMeme(Endpoint):
         self.meme_id = self.json.get('id')
 
         return self.meme_id
-
-    @allure.step('Check that text is the same as sent')
-    def check_response_text_is_correct(self, text):
-        assert self.json['text'] == text

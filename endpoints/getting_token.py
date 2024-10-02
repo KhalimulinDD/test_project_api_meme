@@ -40,8 +40,12 @@ class GetToken(Endpoint):
         except requests.exceptions.JSONDecodeError:
             print("Ошибка: ответ не содержит корректный JSON.")
             print("Ответ сервера:", self.response.text)
-            return None
+            return self.response
 
         self.token = self.json['token']
 
-        return self.token
+        return self.response
+
+    @allure.step('Check that user is the same as sent')
+    def check_response_user_is_correct(self, user):
+        assert self.json['user'] == user
