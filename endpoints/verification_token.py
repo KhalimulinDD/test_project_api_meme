@@ -27,7 +27,6 @@ class ExaminationToken(Endpoint):
 
         # Проверка валидности токена по статусу ответа
         if self.response.status_code == 200:
-            print(f"Токен валиден: {self.headers['Authorization']}")
             return True  # Токен валиден
         else:
             print(f"Токен невалиден: {self.headers['Authorization']}")

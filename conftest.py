@@ -168,6 +168,29 @@ def create_and_update_meme_invalid_token(
     delete_meme_endpoint.delete_meme(created_meme_id=created_meme_id)
 
 
+@pytest.fixture()
+def create_meme_and_restore_token_after_test(create_meme_endpoint, delete_meme_endpoint):
+    """
+    Фикстура для создания мема, сохранения токена перед тестом и удаления мема после теста с восстановлением токена.
+    """
+
+    # Создание мема
+    created_meme_id = create_meme_endpoint.create_new_meme()
+
+    # Сохранение текущего токена
+    saved_token = Endpoint.headers.get('Authorization')
+
+    # Возвращаем meme_id для использования в тесте
+    yield created_meme_id
+
+    # Восстановление токена после теста и удаление мема
+    if saved_token:
+        Endpoint.headers['Authorization'] = saved_token  # Восстанавливаем токен
+
+    # Удаление мема после теста
+    delete_meme_endpoint.delete_meme(created_meme_id=created_meme_id)
+
+
 @pytest.fixture
 def create_invalid_token(create_meme_endpoint):
     """Фикстура для подстановки несуществующего токена в заголовки"""

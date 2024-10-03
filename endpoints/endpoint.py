@@ -1,6 +1,7 @@
-import allure
 import copy
+import allure
 import random
+import pytest
 from faker import Faker
 
 fake = Faker()
@@ -37,9 +38,14 @@ class Endpoint:
         }
 
     # Функция для создания вариаций с негативными данными
-    def generate_invalid_data(self, field, invalid_value):
+    def generate_invalid_data(self, field, invalid_value, meme_id=None):
         """Генерирует JSON с заменой одного поля на невалидное значение."""
         data = copy.deepcopy(self.data_body(self.random_type))  # Используем копию, чтобы не изменить оригинал
+
+        # Добавляем поле id, если meme_id передан (для теста на изменение)
+        if meme_id is not None:
+            data['id'] = meme_id
+
         keys = field.split(".")
         obj = data
         for key in keys[:-1]:
@@ -49,25 +55,39 @@ class Endpoint:
 
     # Параметры для тестирования (поля и их невалидные значения)
     invalid_scenarios = [
-        ("text", 12345),  # Неверный тип поля text
-        ("text", None),  # Отсутствие обязательного поля text
-        ("text", ["Array", "Instead", "Of", "String"]),  # Неверный тип: массив вместо строки
-        ("text", {"object": "instead of string"}),  # Неверный тип: объект вместо строки
 
-        ("url", 123),  # Неверный формат URL
-        ("url", None),  # Отсутствие обязательного поля url
-        ("url", ["http://array.com", "http://instead.com"]),  # Массив вместо строки URL
-        ("url", {"object": "instead of URL"}),  # Объект вместо строки URL
+        # Поле text
+        ("text", 12345),  # Int вместо String
+        ("text", 1234.5),  # Float вместо String
+        ("text", None),  # Пустое значение в поле text
+        ("text", ["Array", "Instead", "Of", "String"]),  # Array вместо String
+        ("text", {"object": "instead of string"}),  # Object вместо String
 
-        ("tags", "Super"),  # Неверный тип поля tags
-        ("tags", None),  # Отсутствие обязательного поля tags
-        ("tags", "Invalid!@#$"),  # Тег содержит специальные символы
-        ("tags", {"object": "instead of array"}),  # Неверный тип: объект вместо массива
+        # Поле url
+        ("url", 123),  # Int вместо String
+        ("url", 123.2),  # # Float вместо String
+        ("url", None),  # Пустое значение
+        ("url", ["http://array.com", "http://instead.com"]),  # Array вместо String
+        ("url", {"object": "instead of URL"}),  # Object вместо String
 
-        ("info", "String"),  # Неверный тип поля info (строка вместо объекта)
-        ("info", None),  # Отсутствие обязательного поля info
-        ("info", ["Array", "Instead", "Of", "Object"]),  # Массив вместо объекта
-        ("info", 12345),  # Неверный тип: число вместо объекта
+        # Поле tags
+        ("tags", 12345),  # Int вместо Array
+        ("tags", 1234.5),  # Float вместо Array
+        ("tags", None),  # Пустое значение
+        ("tags", "Super"),  # String вместо Array
+        pytest.param(
+            "tags", [None], marks=pytest.mark.xfail(
+                reason="Ожидаемый фейл из-за бага с пустым значением тега"
+            )
+        ),  # Пустое значение тэга
+        ("tags", {"object": "instead of array"}),  # Object вместо Array
+
+        # Поле info
+        ("info", 12345),  # Int вместо Array
+        ("info", 1234.5),  # Float вместо Object
+        ("info", None),  # Пустое значение в поле info
+        ("info", "String"),  # String вместо Object
+        ("info", ["Array", "Instead", "Of", "Object"]),  # Array вместо Object
     ]
 
     # Функция для создания вариаций с пустыми строками, массивами и обьектами
@@ -83,17 +103,22 @@ class Endpoint:
 
     # Параметры для тестирования (поля и пустые строки, массивы и обьекты)
     valid_scenarios = [
-        ("text", ""),  # Пустая строка в поле text
-        ("text", "!#$%^&*()_+"),  # Спецсимволы в поле text
 
-        ("url", ""),  # Пустая строка в поле URL
-        ("url", "!#$%^&*()_+"),  # Спецсимволы в поле URL
+        # Поле text
+        ("text", ""),  # Пустая строка
+        ("text", "!#$%^&*()_+"),  # Спецсимволы
 
-        ("tags", []),  # Пустой массив в поле tags
-        ("tags", ["!#$%^&*()_+"]),  # Спецсимволы в массиве поле tags
+        # Поле url
+        ("url", ""),  # Пустая строка
+        ("url", "!#$%^&*()_+"),  # Спецсимволы
 
-        ("info", {}),  # Пустой обьект в поле info
-        ("info", {"special_characters": "!#$%^&*()_+"}),  # Спецсимволы в обьекте поля info
+        # Поле tags
+        ("tags", []),  # Пустой массив
+        ("tags", ["!#$%^&*()_+"]),  # Спецсимволы в массиве
+
+        # Поле info
+        ("info", {}),  # Пустой обьект
+        ("info", {"special_characters": "!#$%^&*()_+"}),  # Спецсимволы в обьекте
     ]
 
     @allure.step('Check that text is the same as sent')
