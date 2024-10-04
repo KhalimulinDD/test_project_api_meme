@@ -10,13 +10,13 @@ import pytest
 def test_getting_all_memes(examination_and_update_token, get_all_memes_endpoint):
 
     # Получение всех мемов
-    response = get_all_memes_endpoint.getting_all_memes()
+    get_all_memes_endpoint.getting_all_memes()
 
     # Проверка статус кода ответа
     get_all_memes_endpoint.check_that_status_is_200()
 
     # Проверка что в ответе содержится более 10 обьектов
-    get_all_memes_endpoint.check_data_objects(response)
+    get_all_memes_endpoint.check_data_objects(min_objects=10)
 
 
 @allure.feature('Getting all memes without token')

@@ -14,9 +14,10 @@ def test_create_meme(examination_and_update_token, create_meme_endpoint, cleanup
     create_body = {
         "text": "New meme",
         "url": "http//luk.ru",
-        "tags": ["Super", 33],
+        "tags": ["Super", 33, 44.3, True],
         "info": {
-            "information": "Информация"
+            "information": "Информация",
+            "valid": "valid"
         }
     }
 
@@ -26,8 +27,8 @@ def test_create_meme(examination_and_update_token, create_meme_endpoint, cleanup
     # Проверка статус кода ответа
     create_meme_endpoint.check_that_status_is_200()
 
-    # Проверка значения в поле text созданного мема
-    create_meme_endpoint.check_response_text_is_correct(create_body['text'])
+    # Проверка значения во всех полях созданного мема
+    create_meme_endpoint.check_meme_data_is_correct(create_body)
 
 
 @allure.feature('Create meme with empty value or special characters')

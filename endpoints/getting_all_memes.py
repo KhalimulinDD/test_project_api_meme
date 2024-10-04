@@ -86,7 +86,6 @@ class GettingAllMemes(Endpoint):
         # Возвращаем случайный id
         return random.choice(meme_ids)
 
-    @staticmethod
-    def check_data_objects(response):
+    def check_data_objects(self, min_objects):
         """Проверяет, что в массиве 'data' содержится более 10 объектов."""
-        assert len(response.json()['data']) > 10
+        assert len(self.response.json()['data']) > min_objects
