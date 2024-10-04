@@ -56,21 +56,21 @@ class Endpoint:
     # Параметры для тестирования (поля и их невалидные значения)
     invalid_scenarios = [
 
-        # Поле text
+        # Поле text с типом (String)
         ("text", 12345),  # Int вместо String
         ("text", 1234.5),  # Float вместо String
-        ("text", None),  # Пустое значение в поле text
+        ("text", None),  # Пустое значение
         ("text", ["Array", "Instead", "Of", "String"]),  # Array вместо String
         ("text", {"object": "instead of string"}),  # Object вместо String
 
-        # Поле url
+        # Поле url с типом (String)
         ("url", 123),  # Int вместо String
         ("url", 123.2),  # # Float вместо String
         ("url", None),  # Пустое значение
         ("url", ["http://array.com", "http://instead.com"]),  # Array вместо String
         ("url", {"object": "instead of URL"}),  # Object вместо String
 
-        # Поле tags
+        # Поле tags с типом (Array)
         ("tags", 12345),  # Int вместо Array
         ("tags", 1234.5),  # Float вместо Array
         ("tags", None),  # Пустое значение
@@ -79,13 +79,13 @@ class Endpoint:
             "tags", [None], marks=pytest.mark.xfail(
                 reason="Ожидаемый фейл из-за бага с пустым значением тега"
             )
-        ),  # Пустое значение тэга
+        ),  # Значение None в тэге
         ("tags", {"object": "instead of array"}),  # Object вместо Array
 
-        # Поле info
-        ("info", 12345),  # Int вместо Array
+        # Поле info с типом (Object)
+        ("info", 12345),  # Int вместо Object
         ("info", 1234.5),  # Float вместо Object
-        ("info", None),  # Пустое значение в поле info
+        ("info", None),  # Пустое значение
         ("info", "String"),  # String вместо Object
         ("info", ["Array", "Instead", "Of", "Object"]),  # Array вместо Object
     ]
@@ -101,7 +101,7 @@ class Endpoint:
         obj[keys[-1]] = valid_value
         return data
 
-    # Параметры для тестирования (поля и пустые строки, массивы и обьекты)
+    # Параметры для тестирования (поля и пустые строки, массивы, обьекты и спецсимволы)
     valid_scenarios = [
 
         # Поле text

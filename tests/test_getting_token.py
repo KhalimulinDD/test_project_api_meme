@@ -10,13 +10,13 @@ import os
 @pytest.mark.smoke
 def test_getting_token(get_token_endpoint):
 
-    # Получаем логин
+    # Получение логина из .env
     login = os.getenv('LOGIN')
 
-    # Получаем токен
+    # Получение токена
     get_token_endpoint.get_new_token()
 
-    # Проверка ответа
+    # Проверка статус кода ответа
     get_token_endpoint.check_that_status_is_200()
 
     # Проверка user в ответе
@@ -28,10 +28,11 @@ def test_getting_token(get_token_endpoint):
 @allure.title('Получение токена без имени')
 @allure.description('Данный тест выполняет попытку получения токена без указания имени пользователя в теле запроса')
 @pytest.mark.negative
+@pytest.mark.negative_getting_token
 def test_getting_token_without_name(get_token_endpoint):
 
-    # Получаем токен
+    # Получение токена
     get_token_endpoint.get_new_token(payload={"name": None})
 
-    # Проверка ответа
+    # Проверка статус кода ответа
     get_token_endpoint.check_that_status_is_400()

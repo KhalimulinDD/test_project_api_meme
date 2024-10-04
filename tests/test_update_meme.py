@@ -11,6 +11,7 @@ from endpoints.endpoint import Endpoint
 def test_update_your_meme(
         examination_and_update_token, create_meme_fixture, update_meme_endpoint, cleanup_meme_fixture, request
 ):
+    # Тело запроса
     update_body = {
         "id": create_meme_fixture,
         "text": "Good meme",
@@ -21,10 +22,10 @@ def test_update_your_meme(
         }
     }
 
-    # Изменение мема
+    # Изменение мема и передача meme_id в request.function для удаления в фикстуру cleanup
     request.function.meme_id = update_meme_endpoint.update_meme(meme_id=create_meme_fixture, payload=update_body)
 
-    # Проверка созданного мема
+    # Проверка статус кода ответа
     update_meme_endpoint.check_that_status_is_200()
 
     # Проверка значения в поле text измененного мема
@@ -36,9 +37,11 @@ def test_update_your_meme(
 @allure.title('Изменение мема другого пользователя')
 @allure.description('Данный тест выполняет попытку изменения мема, созданного другим пользователем')
 @pytest.mark.negative
+@pytest.mark.negative_update_meme
 def test_update_meme_another_user(
         examination_and_update_token, update_meme_endpoint, get_meme_id_of_another_user):
 
+    # Тело запроса
     update_body = {
         "id": get_meme_id_of_another_user,
         "text": "Good meme",
@@ -52,7 +55,7 @@ def test_update_meme_another_user(
     # Изменение мема
     update_meme_endpoint.update_meme(meme_id=get_meme_id_of_another_user, payload=update_body)
 
-    # Проверка созданного мема
+    # Проверка статус кода ответа
     update_meme_endpoint.check_that_status_is_403()
 
 
@@ -63,22 +66,24 @@ def test_update_meme_another_user(
     'Данный тест выполняет изменение мема без указания обязательных полей или некорректным типом данных'
 )
 @pytest.mark.negative
+@pytest.mark.negative_update_meme
 @pytest.mark.parametrize('field, invalid_value', Endpoint.invalid_scenarios)
 def test_update_meme_incorrect_data(
         examination_and_update_token, create_meme_fixture,
         update_meme_endpoint, cleanup_meme_fixture, field, invalid_value, request
 ):
 
-    # Сохраняем meme_id в request.function для удаления в cleanup
+    # Сохраняем meme_id в request.function для удаления в фикстуру cleanup
     request.function.meme_id = create_meme_fixture
 
+    # Генерация тела запроса
     generator = Endpoint()
     invalid_data = generator.generate_invalid_data(field, invalid_value, meme_id=create_meme_fixture)
 
-    # Создание мема
+    # Изменение мема
     update_meme_endpoint.update_meme(meme_id=create_meme_fixture, payload=invalid_data)
 
-    # Проверка созданного мема
+    # Проверка статус кода ответа
     update_meme_endpoint.check_that_status_is_400()
 
 
@@ -87,6 +92,7 @@ def test_update_meme_incorrect_data(
 @allure.title('Изменение мема без токена')
 @allure.description('Данный тест выполняет попытку изменения мема, без указания токена в заголовки')
 @pytest.mark.negative
+@pytest.mark.negative_update_meme
 def test_update_meme_without_token(
         examination_and_update_token, create_and_update_meme_without_token, update_meme_endpoint
 ):
@@ -94,6 +100,7 @@ def test_update_meme_without_token(
     # Вызов функции фикстуры с аргументом False для удаления токена
     meme_id, saved_token = create_and_update_meme_without_token
 
+    # Тело запроса
     update_body = {
         "id": meme_id,
         "text": "Good meme",
@@ -107,7 +114,7 @@ def test_update_meme_without_token(
     # Изменение мема
     update_meme_endpoint.update_meme(meme_id=meme_id, payload=update_body)
 
-    # Проверка созданного мема
+    # Проверка статус кода ответа
     update_meme_endpoint.check_that_status_is_401()
 
 
@@ -116,6 +123,7 @@ def test_update_meme_without_token(
 @allure.title('Изменение мема с несуществующим токеном')
 @allure.description('Данный тест выполняет попытку изменения мема, с указанием несуществующего токена в заголовки')
 @pytest.mark.negative
+@pytest.mark.negative_update_meme
 def test_update_meme_invalid_token(
         examination_and_update_token, create_and_update_meme_invalid_token, update_meme_endpoint
 ):
@@ -136,5 +144,5 @@ def test_update_meme_invalid_token(
     # Изменение мема
     update_meme_endpoint.update_meme(meme_id=meme_id, payload=update_body)
 
-    # Проверка созданного мема
+    # Проверка статус кода ответа
     update_meme_endpoint.check_that_status_is_401()

@@ -9,10 +9,10 @@ import pytest
 @pytest.mark.smoke
 def test_getting_one_your_meme(examination_and_update_token, getting_your_meme_id, get_one_meme_endpoint):
 
-    # Получаем один мем созданый носителем токена в заголовке
+    # Получение одного мема созданного носителем токена в заголовке
     get_one_meme_endpoint.getting_one_meme(meme_id=getting_your_meme_id)
 
-    # Проверка ответа
+    # Проверка статус кода ответа
     get_one_meme_endpoint.check_that_status_is_200()
 
     # Проверка что в теле ответа содержится запрашиваемый идентификатор
@@ -26,10 +26,10 @@ def test_getting_one_your_meme(examination_and_update_token, getting_your_meme_i
 @pytest.mark.smoke
 def test_getting_one_another_meme(examination_and_update_token, get_meme_id_of_another_user, get_one_meme_endpoint):
 
-    # Получаем один мем созданый другим пользователем
+    # Получение одного мема созданного другим пользователем
     get_one_meme_endpoint.getting_one_meme(meme_id=get_meme_id_of_another_user)
 
-    # Проверка ответа
+    # Проверка статус кода ответа
     get_one_meme_endpoint.check_that_status_is_200()
 
     # Проверка что в теле ответа содержится запрашиваемый идентификатор
@@ -41,12 +41,13 @@ def test_getting_one_another_meme(examination_and_update_token, get_meme_id_of_a
 @allure.title('Получение одного мема без токена')
 @allure.description('Данный тест выполняет попытку получения одного мема без указания токена в заголовки')
 @pytest.mark.negative
+@pytest.mark.negative_getting_one_meme
 def test_getting_one_meme_without_token(remove_token_from_headers, get_one_meme_endpoint):
 
-    # Получаем один мем
+    # Получение одного мема
     get_one_meme_endpoint.getting_one_meme()
 
-    # Проверка ответа
+    # Проверка статус кода ответа
     get_one_meme_endpoint.check_that_status_is_401()
 
 
@@ -55,10 +56,11 @@ def test_getting_one_meme_without_token(remove_token_from_headers, get_one_meme_
 @allure.title('Получение одного мема с несуществующим токеном')
 @allure.description('Данный тест выполняет попытку получения одного мема без указания токена в заголовки')
 @pytest.mark.negative
+@pytest.mark.negative_getting_one_meme
 def test_getting_one_meme_with_invalid_token(create_invalid_token, get_one_meme_endpoint):
 
-    # Получаем один мем
+    # Получение одного мема
     get_one_meme_endpoint.getting_one_meme()
 
-    # Проверка ответа
+    # Проверка статус кода ответа
     get_one_meme_endpoint.check_that_status_is_401()

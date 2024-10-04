@@ -9,10 +9,10 @@ import pytest
 @pytest.mark.smoke
 def test_delete_meme(examination_and_update_token, create_meme_fixture, delete_meme_endpoint, get_one_meme_endpoint):
 
-    # Удаляем мем
+    # Удаление мема
     delete_meme_endpoint.delete_meme(created_meme_id=create_meme_fixture)
 
-    # Проверка удаления мема
+    # Проверка статус кода ответа
     delete_meme_endpoint.check_that_status_is_200()
 
     # Проверка, что мем действительно удален
@@ -24,12 +24,13 @@ def test_delete_meme(examination_and_update_token, create_meme_fixture, delete_m
 @allure.title('Удаление мема без идентификатора')
 @allure.description('Данный тест выполняет попытку удаление мема без указания идентификатора')
 @pytest.mark.negative
+@pytest.mark.negative_delete_meme
 def test_delete_meme_no_identifier(examination_and_update_token, delete_meme_endpoint):
 
-    # Удаляем мем
+    # Удаление мема
     delete_meme_endpoint.delete_meme(created_meme_id=None)
 
-    # Проверка ответа после удаления
+    # Проверка статус кода ответа
     delete_meme_endpoint.check_that_status_is_404()
 
 
@@ -38,12 +39,13 @@ def test_delete_meme_no_identifier(examination_and_update_token, delete_meme_end
 @allure.title('Удаление мема другого пользователя')
 @allure.description('Данный тест выполняет попытку удаление мема созданного другим пользователем')
 @pytest.mark.negative
+@pytest.mark.negative_delete_meme
 def test_delete_another_user_meme(examination_and_update_token, get_meme_id_of_another_user, delete_meme_endpoint):
 
-    # Удаляем мем
+    # Удаление мема
     delete_meme_endpoint.delete_meme(created_meme_id=get_meme_id_of_another_user)
 
-    # Проверка ответа после удаления
+    # Проверка статус кода ответа
     delete_meme_endpoint.check_that_status_is_403()
 
 
@@ -52,15 +54,16 @@ def test_delete_another_user_meme(examination_and_update_token, get_meme_id_of_a
 @allure.title('Удаление мема без токена')
 @allure.description('Данный тест выполняет попытку удаление мема без указания токена в заголовки')
 @pytest.mark.negative
+@pytest.mark.negative_delete_meme
 def test_delete_meme_without_token(
         examination_and_update_token, create_meme_and_restore_token_after_test,
         remove_token_from_headers, delete_meme_endpoint
 ):
 
-    # Удаляем мем
+    # Удаление мема
     delete_meme_endpoint.delete_meme(created_meme_id=create_meme_and_restore_token_after_test)
 
-    # Проверка ответа после удаления
+    # Проверка статус кода ответа
     delete_meme_endpoint.check_that_status_is_401()
 
 
@@ -69,13 +72,14 @@ def test_delete_meme_without_token(
 @allure.title('Удаление мема с несуществующим токеном')
 @allure.description('Данный тест выполняет попытку удаление мема с указанием не существующего токена в заголовок')
 @pytest.mark.negative
+@pytest.mark.negative_delete_meme
 def test_delete_meme_with_invalid_token(
         examination_and_update_token, create_meme_and_restore_token_after_test,
         create_invalid_token, delete_meme_endpoint
 ):
 
-    # Удаляем мем
+    # Удаление мема
     delete_meme_endpoint.delete_meme(created_meme_id=create_meme_and_restore_token_after_test)
 
-    # Проверка ответа после удаления
+    # Проверка статус кода ответа
     delete_meme_endpoint.check_that_status_is_401()
