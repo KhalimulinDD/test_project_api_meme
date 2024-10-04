@@ -14,9 +14,9 @@ def test_update_your_meme(
     # Тело запроса
     update_body = {
         "id": create_meme_fixture,
-        "text": "Good meme",
-        "url": "http//luk.ru",
-        "tags": ["Super", 33, 44.4],
+        "text": "Update test",
+        "url": "http//project_api.ru",
+        "tags": ["Peper", 1234, 44.4],
         "info": {
             "information": "Тут не нужная информация"
         }
@@ -29,7 +29,7 @@ def test_update_your_meme(
     update_meme_endpoint.check_that_status_is_200()
 
     # Проверка значения в поле text измененного мема
-    update_meme_endpoint.check_response_text_is_correct(update_body['text'])
+    update_meme_endpoint.check_meme_data_is_correct(update_body)
 
 
 @allure.feature('Update meme another user')

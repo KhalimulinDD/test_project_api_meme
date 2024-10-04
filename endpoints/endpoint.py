@@ -121,9 +121,45 @@ class Endpoint:
         ("info", {"special_characters": "!#$%^&*()_+"}),  # Спецсимволы в обьекте
     ]
 
-    @allure.step('Check that text is the same as sent')
-    def check_response_text_is_correct(self, text):
-        assert self.json['text'] == text
+    # @allure.step('Check that text is the same as sent')
+    # def check_response_text_is_correct(self, text):
+    #     assert self.json['text'] == text
+    #
+    # @allure.step('Check that text is the same as sent')
+    # def check_response_url_is_correct(self, url):
+    #     assert self.json['url'] == url
+    #
+    # @allure.step('Check that text is the same as sent')
+    # def check_response_tags_is_correct(self, tags):
+    #     assert self.json['tags'] == tags
+    #
+    # @allure.step('Check that text is the same as sent')
+    # def check_response_info_is_correct(self, info):
+    #     assert self.json['info'] == info
+
+    @allure.step('Checking the response body')
+    def check_meme_data_is_correct(self, expected_data):
+        """Проверяет, что все данные в ответе соответствуют ожидаемым данным."""
+        for key, expected_value in expected_data.items():
+
+            if key == "id":
+                continue
+
+            assert key in self.json
+            actual_value = self.json[key]
+
+            if isinstance(expected_value, dict):
+                # Если значение — словарь (например, "info"), проверяем рекурсивно
+                assert isinstance(actual_value, dict)
+                for sub_key, sub_value in expected_value.items():
+                    assert sub_key in actual_value
+                    assert actual_value[
+                               sub_key] == sub_value
+            else:
+                # Проверка остальных типов данных (строки, числа, списки и т.д.)
+                assert actual_value == expected_value
+
+        print("Все поля успешно проверены.")
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):

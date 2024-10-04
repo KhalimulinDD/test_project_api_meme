@@ -29,6 +29,7 @@ class DeleteMeme(Endpoint):
         print(f"\nУдаление мема с ID: {created_meme_id}, Статус ответа: {self.response.status_code}")
         return self.response
 
+    @allure.step('Checking for meme removal')
     def check_meme_deleted(self, meme_id, get_one_meme_endpoint):
         """Проверяет, что мем действительно удален, ожидая статус-код 404"""
         self.response = get_one_meme_endpoint.getting_one_meme(meme_id)
