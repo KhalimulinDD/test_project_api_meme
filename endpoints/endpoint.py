@@ -121,22 +121,6 @@ class Endpoint:
         ("info", {"special_characters": "!#$%^&*()_+"}),  # Спецсимволы в обьекте
     ]
 
-    # @allure.step('Check that text is the same as sent')
-    # def check_response_text_is_correct(self, text):
-    #     assert self.json['text'] == text
-    #
-    # @allure.step('Check that text is the same as sent')
-    # def check_response_url_is_correct(self, url):
-    #     assert self.json['url'] == url
-    #
-    # @allure.step('Check that text is the same as sent')
-    # def check_response_tags_is_correct(self, tags):
-    #     assert self.json['tags'] == tags
-    #
-    # @allure.step('Check that text is the same as sent')
-    # def check_response_info_is_correct(self, info):
-    #     assert self.json['info'] == info
-
     @allure.step('Checking the response body')
     def check_meme_data_is_correct(self, expected_data):
         """Проверяет, что все данные в ответе соответствуют ожидаемым данным."""
