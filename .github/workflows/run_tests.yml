@@ -134,7 +134,7 @@ jobs:
         if: "github.event.inputs.deployment_target == 'regression_verification_token'"
         run: pytest -m regression_verification_token --alluredir=allure-results
         
-      - name: Store allure results
+      - name: Store allure results for generate-report
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
@@ -160,7 +160,7 @@ jobs:
         
       - run: allure generate -c allure-results -o _site
       
-      - name: Store allure results
+      - name: Store allure results for run-tests
         uses: actions/upload-artifact@v4
         with:
           name: _site
