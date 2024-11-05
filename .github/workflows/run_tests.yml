@@ -64,10 +64,10 @@ jobs:
       - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
       - run: cp pages_history/history/* allure-results && cp -r pages_history/history allure-results 
       
-      - name: Store allure results
+      - name: Store allure results fot download-history
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-download-history
           path: allure-results
           retention-days: 1
 
@@ -134,10 +134,10 @@ jobs:
         if: "github.event.inputs.deployment_target == 'regression_verification_token'"
         run: pytest -m regression_verification_token --alluredir=allure-results
         
-      - name: Store allure results for generate-report
+      - name: Store allure results for run-tests
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-run-tests
           path: allure-results
           retention-days: 1
 
@@ -160,10 +160,10 @@ jobs:
         
       - run: allure generate -c allure-results -o _site
       
-      - name: Store allure results for run-tests
+      - name: Store allure results for generate-report
         uses: actions/upload-artifact@v4
         with:
-          name: _site
+          name: allure-results-generate-report
           path: _site
           retention-days: 1
           
