@@ -1,4 +1,4 @@
-name: Automated API tests
+name: Run autotests
 
 on:
   workflow_dispatch:
@@ -104,9 +104,7 @@ jobs:
           
       - name: Install Allure
       
-      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz 
-             && sudo tar -zxvf allure-2.24.0.tgz -C /opt/ 
-             && sudo ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure
+      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz && sudo tar -zxvf allure-2.32.0.tgz -C /opt/ && sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure
              
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4
@@ -130,6 +128,7 @@ jobs:
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
+        
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
