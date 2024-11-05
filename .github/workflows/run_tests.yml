@@ -19,6 +19,11 @@ on:
           - regression_getting_token
           - regression_update_meme
           - regression_verification_token
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
           
 jobs:
   run-tests:
@@ -128,4 +133,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        
