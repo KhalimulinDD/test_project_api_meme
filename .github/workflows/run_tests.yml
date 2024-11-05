@@ -31,56 +31,43 @@ jobs:
     name: Run autotests
     steps:
       - name: Checkout autotests
-        uses: actions/checkout@v4
-        
+        uses: actions/checkout@v4        
       - name: Set up Python environment
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
-          
+          python-version: '3.13'          
       - name: Install dependencies
         run: pip install -r requirements.txt
-
       - name: Create .env file
         run: |
-          echo "DATABASE_URL=postgres://user:password@localhost:5432/dbname" > .env
-        
+          echo "LOGIN=KhalimulinDD" > .env     
       - name: Run all tests
         if: "github.event.inputs.deployment_target == 'All tests'"
         run: pytest --alluredir=allure-results
-        
       - name: Run smoke tests
         if: "github.event.inputs.deployment_target == 'smoke'"
         run: pytest -m smoke --alluredir=allure-results
-        
       - name: Run regression tests
         if: "github.event.inputs.deployment_target == 'regression'"
         run: pytest -m regression --alluredir=allure-results
-        
       - name: Run regression_create_meme tests
         if: "github.event.inputs.deployment_target == 'regression_create_meme'"
-        run: pytest -m regression_create_meme --alluredir=allure-results
-        
+        run: pytest -m regression_create_meme --alluredir=allure-results       
       - name: Run regression_delete_meme tests
         if: "github.event.inputs.deployment_target == 'regression_delete_meme'"
-        run: pytest -m regression_delete_meme --alluredir=allure-results
-        
+        run: pytest -m regression_delete_meme --alluredir=allure-results     
       - name: Run regression_getting_all_meme tests
         if: "github.event.inputs.deployment_target == 'regression_getting_all_meme'"
-        run: pytest -m regression_getting_all_meme --alluredir=allure-results
-        
+        run: pytest -m regression_getting_all_meme --alluredir=allure-results   
       - name: Run regression_getting_one_meme tests
         if: "github.event.inputs.deployment_target == 'regression_getting_one_meme'"
-        run: pytest -m regression_getting_one_meme --alluredir=allure-results
-        
+        run: pytest -m regression_getting_one_meme --alluredir=allure-results 
       - name: Run regression_getting_token tests
         if: "github.event.inputs.deployment_target == 'regression_getting_token'"
-        run: pytest -m regression_getting_token --alluredir=allure-results
-        
+        run: pytest -m regression_getting_token --alluredir=allure-results  
       - name: Run regression_update_meme tests
         if: "github.event.inputs.deployment_target == 'regression_update_meme'"
-        run: pytest -m regression_update_meme --alluredir=allure-results
-        
+        run: pytest -m regression_update_meme --alluredir=allure-results 
       - name: Run regression_verification_token tests
         if: "github.event.inputs.deployment_target == 'regression_verification_token'"
         run: pytest -m regression_verification_token --alluredir=allure-results
@@ -100,17 +87,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
-          java-version: '17'
-          
-      - name: Install Allure
-      
-      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz && sudo tar -zxvf allure-2.32.0.tgz -C /opt/ && sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure
-             
+          java-version: '17'  
+      - name: Install Allure 
+      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz && sudo tar -zxvf allure-2.32.0.tgz -C /opt/ && sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure    
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4
-        
+        uses: actions/download-artifact@v4    
       - run: allure generate -c allure-results -o _site
-      
       - name: Store allure results
         uses: actions/upload-artifact@v4
         with:
@@ -125,10 +107,8 @@ jobs:
     steps:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4
-
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        
+        uses: actions/upload-pages-artifact@v3       
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
