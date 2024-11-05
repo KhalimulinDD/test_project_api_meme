@@ -1,1 +1,35 @@
+name: Automated API tests
 
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: choose tests set
+        required: true
+        type: choise
+        default: smoke
+        options:
+          - smoke
+          - regression
+          - regression_create_meme
+          - regression_delete_meme
+          - regression_getting_all_meme
+          - regression_getting_one_meme
+          - regression_getting_token
+          - regression_update_meme
+          - regression_verification_token
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    name: Run autotests
+    steps:
+      - name: Checkout autotests
+        uses: ations/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest
