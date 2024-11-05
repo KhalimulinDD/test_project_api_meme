@@ -6,7 +6,7 @@ on:
       deployment_target:
         description: choose tests set
         required: true
-        type: choise
+        type: choice
         default: all
         options:
           - all
