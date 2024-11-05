@@ -44,7 +44,7 @@ jobs:
           && 
           curl -L 
           -H "Accept: applications/vnd.github+json" 
-          -H "Authorization: Bearer ${{ secrets.TOKEN }}" # Данный токен переодически необходимо генерировать заново
+          -H "Authorization: Bearer ${{ secrets.TOKEN }}"
           -H "X-GitHub-Api-Version: 2022-11-28" 
           https://api.github.com/repos/KhalimulinDD/test_project_api_meme/actions/artifacts/$ARTIFACT_ID/zip -o artifacts.zip 
           &&
@@ -56,9 +56,9 @@ jobs:
           && 
           curl -L 
           -H "Accept: applications/vnd.github+json" 
-          -H "Authorization: Bearer ${{ secrets.TOKEN }}" # Данный токен переодически необходимо генерировать заново
+          -H "Authorization: Bearer ${{ secrets.TOKEN }}"
           -H "X-GitHub-Api-Version: 2022-11-28" 
-          https://api.github.com/repos/KhalimulinDD/test_project_api_meme/actions/artifacts/$REPORT_ID/zip -o artifacts.zip
+          "https://api.github.com/repos/KhalimulinDD/test_project_api_meme/actions/artifacts/$REPORT_ID/zip -o artifacts.zip
           
       - run: mkdir allure-results && unzip artifacts.zip -d allure-results
       - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
