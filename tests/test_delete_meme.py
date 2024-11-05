@@ -23,8 +23,8 @@ def test_delete_meme(examination_and_update_token, create_meme_fixture, delete_m
 @allure.story('Implementation of memes')
 @allure.title('Удаление мема без идентификатора')
 @allure.description('Данный тест выполняет попытку удаление мема без указания идентификатора')
-@pytest.mark.negative
-@pytest.mark.negative_delete_meme
+@pytest.mark.regression
+@pytest.mark.regression_delete_meme
 def test_delete_meme_no_identifier(examination_and_update_token, delete_meme_endpoint):
 
     # Удаление мема
@@ -38,8 +38,8 @@ def test_delete_meme_no_identifier(examination_and_update_token, delete_meme_end
 @allure.story('Implementation of memes')
 @allure.title('Удаление мема другого пользователя')
 @allure.description('Данный тест выполняет попытку удаление мема созданного другим пользователем')
-@pytest.mark.negative
-@pytest.mark.negative_delete_meme
+@pytest.mark.regression
+@pytest.mark.regression_delete_meme
 def test_delete_another_user_meme(examination_and_update_token, get_meme_id_of_another_user, delete_meme_endpoint):
 
     # Удаление мема
@@ -53,8 +53,8 @@ def test_delete_another_user_meme(examination_and_update_token, get_meme_id_of_a
 @allure.story('Implementation of memes')
 @allure.title('Удаление мема без токена')
 @allure.description('Данный тест выполняет попытку удаление мема без указания токена в заголовки')
-@pytest.mark.negative
-@pytest.mark.negative_delete_meme
+@pytest.mark.regression
+@pytest.mark.regression_delete_meme
 def test_delete_meme_without_token(
         examination_and_update_token, create_meme_and_restore_token_after_test,
         remove_token_from_headers, delete_meme_endpoint
@@ -71,8 +71,8 @@ def test_delete_meme_without_token(
 @allure.story('Implementation of memes')
 @allure.title('Удаление мема с несуществующим токеном')
 @allure.description('Данный тест выполняет попытку удаление мема с указанием не существующего токена в заголовок')
-@pytest.mark.negative
-@pytest.mark.negative_delete_meme
+@pytest.mark.regression
+@pytest.mark.regression_delete_meme
 def test_delete_meme_with_invalid_token(
         examination_and_update_token, create_meme_and_restore_token_after_test,
         create_invalid_token, delete_meme_endpoint

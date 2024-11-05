@@ -27,8 +27,8 @@ def test_getting_token(get_token_endpoint):
 @allure.story('Implementation of token')
 @allure.title('Получение токена без имени')
 @allure.description('Данный тест выполняет попытку получения токена без указания имени пользователя в теле запроса')
-@pytest.mark.negative
-@pytest.mark.negative_getting_token
+@pytest.mark.regression
+@pytest.mark.regression_getting_token
 def test_getting_token_without_name(get_token_endpoint):
 
     # Получение токена

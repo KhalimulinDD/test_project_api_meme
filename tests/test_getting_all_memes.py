@@ -23,8 +23,8 @@ def test_getting_all_memes(examination_and_update_token, get_all_memes_endpoint)
 @allure.story('Implementation of memes')
 @allure.title('Получение всех мемов без токена')
 @allure.description('Данный тест выполняет попытку получения всех мемов без указания токена в заголовки')
-@pytest.mark.negative
-@pytest.mark.negative_getting_all_meme
+@pytest.mark.regression
+@pytest.mark.regression_getting_all_meme
 def test_getting_all_memes_without_token(remove_token_from_headers, get_all_memes_endpoint):
 
     # Получение всех мемов
@@ -40,8 +40,8 @@ def test_getting_all_memes_without_token(remove_token_from_headers, get_all_meme
 @allure.description(
     'Данный тест выполняет попытку получения всех мемов с указанием не существующего токена в заголовок'
 )
-@pytest.mark.negative
-@pytest.mark.negative_getting_all_meme
+@pytest.mark.regression
+@pytest.mark.regression_getting_all_meme
 def test_getting_all_memes_with_invalid_token(create_invalid_token, get_all_memes_endpoint):
 
     # Получение всех мемов

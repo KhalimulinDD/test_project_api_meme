@@ -36,8 +36,8 @@ def test_update_your_meme(
 @allure.story('Implementation of memes')
 @allure.title('Изменение мема другого пользователя')
 @allure.description('Данный тест выполняет попытку изменения мема, созданного другим пользователем')
-@pytest.mark.negative
-@pytest.mark.negative_update_meme
+@pytest.mark.regression
+@pytest.mark.regression_update_meme
 def test_update_meme_another_user(
         examination_and_update_token, update_meme_endpoint, get_meme_id_of_another_user):
 
@@ -65,8 +65,8 @@ def test_update_meme_another_user(
 @allure.description(
     'Данный тест выполняет изменение мема без указания обязательных полей или некорректным типом данных'
 )
-@pytest.mark.negative
-@pytest.mark.negative_update_meme
+@pytest.mark.regression
+@pytest.mark.regression_update_meme
 @pytest.mark.parametrize('field, invalid_value', Endpoint.invalid_scenarios)
 def test_update_meme_incorrect_data(
         examination_and_update_token, create_meme_fixture,
@@ -91,8 +91,8 @@ def test_update_meme_incorrect_data(
 @allure.story('Implementation of memes')
 @allure.title('Изменение мема без токена')
 @allure.description('Данный тест выполняет попытку изменения мема, без указания токена в заголовки')
-@pytest.mark.negative
-@pytest.mark.negative_update_meme
+@pytest.mark.regression
+@pytest.mark.regression_update_meme
 def test_update_meme_without_token(
         examination_and_update_token, create_and_update_meme_without_token, update_meme_endpoint
 ):
@@ -122,8 +122,8 @@ def test_update_meme_without_token(
 @allure.story('Implementation of memes')
 @allure.title('Изменение мема с несуществующим токеном')
 @allure.description('Данный тест выполняет попытку изменения мема, с указанием несуществующего токена в заголовки')
-@pytest.mark.negative
-@pytest.mark.negative_update_meme
+@pytest.mark.regression
+@pytest.mark.regression_update_meme
 def test_update_meme_invalid_token(
         examination_and_update_token, create_and_update_meme_invalid_token, update_meme_endpoint
 ):

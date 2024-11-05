@@ -40,8 +40,8 @@ def test_getting_one_another_meme(examination_and_update_token, get_meme_id_of_a
 @allure.story('Implementation of memes')
 @allure.title('Получение одного мема без токена')
 @allure.description('Данный тест выполняет попытку получения одного мема без указания токена в заголовки')
-@pytest.mark.negative
-@pytest.mark.negative_getting_one_meme
+@pytest.mark.regression
+@pytest.mark.regression_getting_one_meme
 def test_getting_one_meme_without_token(remove_token_from_headers, get_one_meme_endpoint):
 
     # Получение одного мема
@@ -55,8 +55,8 @@ def test_getting_one_meme_without_token(remove_token_from_headers, get_one_meme_
 @allure.story('Implementation of memes')
 @allure.title('Получение одного мема с несуществующим токеном')
 @allure.description('Данный тест выполняет попытку получения одного мема без указания токена в заголовки')
-@pytest.mark.negative
-@pytest.mark.negative_getting_one_meme
+@pytest.mark.regression
+@pytest.mark.regression_getting_one_meme
 def test_getting_one_meme_with_invalid_token(create_invalid_token, get_one_meme_endpoint):
 
     # Получение одного мема

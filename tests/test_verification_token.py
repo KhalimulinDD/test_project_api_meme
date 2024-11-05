@@ -20,8 +20,8 @@ def test_examination_token(update_token, exam_token_endpoint):
 @allure.story('Implementation of token')
 @allure.title('Проверка несуществующего токена')
 @allure.description('Данный тест выполняет проверку несуществующего токена')
-@pytest.mark.negative
-@pytest.mark.negative_verification_token
+@pytest.mark.regression
+@pytest.mark.regression_verification_token
 def test_examination_invalid_token(create_invalid_token, exam_token_endpoint):
 
     # Проверка валидности токена

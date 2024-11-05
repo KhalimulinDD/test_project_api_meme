@@ -37,7 +37,7 @@ def test_create_meme(examination_and_update_token, create_meme_endpoint, cleanup
 @allure.description(
     'Данный тест выполняет успешное создание мема с указанием пустой строки, массива, обьекта или спецсимволов'
 )
-@pytest.mark.smoke
+@pytest.mark.regression
 @pytest.mark.parametrize('field, valid_value', Endpoint.valid_scenarios)
 def test_create_meme_correct_data(
         examination_and_update_token, create_meme_endpoint,
@@ -64,8 +64,8 @@ def test_create_meme_correct_data(
 @allure.description(
     'Данный тест выполняет создание мема без указания обязательных полей или некорректным типом данных'
 )
-@pytest.mark.negative
-@pytest.mark.negative_create_meme
+@pytest.mark.regression
+@pytest.mark.regression_create_meme
 @pytest.mark.parametrize('field, invalid_value', Endpoint.invalid_scenarios)
 def test_create_meme_incorrect_data(examination_and_update_token, create_meme_endpoint, field, invalid_value):
 
@@ -84,8 +84,8 @@ def test_create_meme_incorrect_data(examination_and_update_token, create_meme_en
 @allure.story('Implementation of memes')
 @allure.title('Создание мема без токена)')
 @allure.description('Данный тест выполняет создание мема без указания токена в заголовок')
-@pytest.mark.negative
-@pytest.mark.negative_create_meme
+@pytest.mark.regression
+@pytest.mark.regression_create_meme
 def test_create_meme_without_token(remove_token_from_headers, create_meme_endpoint):
 
     # Создание мема
@@ -99,8 +99,8 @@ def test_create_meme_without_token(remove_token_from_headers, create_meme_endpoi
 @allure.story('Implementation of memes')
 @allure.title('Создание мема с несуществующим токеном)')
 @allure.description('Данный тест выполняет создание мема с указанием не существующего токена в заголовок')
-@pytest.mark.negative
-@pytest.mark.negative_create_meme
+@pytest.mark.regression
+@pytest.mark.regression_create_meme
 def test_create_meme_with_invalid_token(create_invalid_token, create_meme_endpoint):
 
     # Создание мема
