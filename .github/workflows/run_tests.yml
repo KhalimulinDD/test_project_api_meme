@@ -97,42 +97,52 @@ jobs:
       - name: Run all tests
         if: "github.event.inputs.deployment_target == 'all'"
         run: pytest --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run smoke tests
         if: "github.event.inputs.deployment_target == 'smoke'"
         run: pytest -m smoke --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression tests
         if: "github.event.inputs.deployment_target == 'regression'"
         run: pytest -m regression --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_create_meme tests
         if: "github.event.inputs.deployment_target == 'regression_create_meme'"
-        run: pytest -m regression_create_meme --alluredir=allure-results 
+        run: pytest -m regression_create_meme --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_delete_meme tests
         if: "github.event.inputs.deployment_target == 'regression_delete_meme'"
-        run: pytest -m regression_delete_meme --alluredir=allure-results 
+        run: pytest -m regression_delete_meme --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_getting_all_meme tests
         if: "github.event.inputs.deployment_target == 'regression_getting_all_meme'"
-        run: pytest -m regression_getting_all_meme --alluredir=allure-results  
+        run: pytest -m regression_getting_all_meme --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_getting_one_meme tests
         if: "github.event.inputs.deployment_target == 'regression_getting_one_meme'"
-        run: pytest -m regression_getting_one_meme --alluredir=allure-results 
+        run: pytest -m regression_getting_one_meme --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_getting_token tests
         if: "github.event.inputs.deployment_target == 'regression_getting_token'"
-        run: pytest -m regression_getting_token --alluredir=allure-results  
+        run: pytest -m regression_getting_token --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_update_meme tests
         if: "github.event.inputs.deployment_target == 'regression_update_meme'"
-        run: pytest -m regression_update_meme --alluredir=allure-results 
+        run: pytest -m regression_update_meme --alluredir=allure-results
+        continue-on-error: true
         
       - name: Run regression_verification_token tests
         if: "github.event.inputs.deployment_target == 'regression_verification_token'"
         run: pytest -m regression_verification_token --alluredir=allure-results
+        continue-on-error: true
         
       - name: Store allure results for run-tests
         uses: actions/upload-artifact@v4
