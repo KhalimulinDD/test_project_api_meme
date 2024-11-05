@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "LOGIN=KhalimulinDD" > .env     
       - name: Run all tests
-        if: "github.event.inputs.deployment_target == 'All tests'"
+        if: "github.event.inputs.deployment_target == 'all'"
         run: pytest --alluredir=allure-results
       - name: Run smoke tests
         if: "github.event.inputs.deployment_target == 'smoke'"
@@ -99,7 +99,7 @@ jobs:
           name: _site
           path: _site
           retention-days: 1
-      
+          
   publish-report:
     runs-on: ubuntu-latest
     needs: generate-report
