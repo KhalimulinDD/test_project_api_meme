@@ -63,6 +63,8 @@ jobs:
       - run: mkdir allure-results && unzip artifacts.zip -d allure-results
       - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
       - run: cp pages_history/history/* allure-results && cp -r pages_history/history allure-results 
+
+      - run: ls -la allure-results
       
       - name: Store allure history
         uses: actions/upload-artifact@v4
