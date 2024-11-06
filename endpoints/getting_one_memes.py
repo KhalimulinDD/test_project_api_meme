@@ -22,8 +22,7 @@ class GettingOneMeme(Endpoint):
                         URL: {self.response.request.url}
                         METHOD: {self.response.request.method}
                         HEADERS: {self.response.request.headers}
-
-                    RESPONSE:    
+                    RESPONSE:
                         STATUS_CODE: {self.response.status_code}
                     """
         print(log)

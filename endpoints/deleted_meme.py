@@ -20,8 +20,7 @@ class DeleteMeme(Endpoint):
                         METHOD: {self.response.request.method}
                         JSON:   {self.response.request.body}
                         HEADERS: {self.response.request.headers}
-
-                    RESPONSE:    
+                    RESPONSE:
                         STATUS_CODE: {self.response.status_code}
                         CONTENT: {self.response.content}
                     """

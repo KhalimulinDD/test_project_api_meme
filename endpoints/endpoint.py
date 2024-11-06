@@ -137,8 +137,7 @@ class Endpoint:
                 assert isinstance(actual_value, dict)
                 for sub_key, sub_value in expected_value.items():
                     assert sub_key in actual_value
-                    assert actual_value[
-                               sub_key] == sub_value
+                    assert actual_value[sub_key] == sub_value
             else:
                 # Проверка остальных типов данных (строки, числа, списки и т.д.)
                 assert actual_value == expected_value
