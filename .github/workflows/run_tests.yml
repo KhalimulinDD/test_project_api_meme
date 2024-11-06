@@ -63,8 +63,6 @@ jobs:
       - run: mkdir allure-results && unzip artifacts.zip -d allure-results
       - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
       - run: cp pages_history/history/* allure-results && cp -r pages_history/history allure-results 
-
-      - run: ls -la allure-results
       
       - name: Store allure history
         uses: actions/upload-artifact@v4
@@ -154,11 +152,7 @@ jobs:
         run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz && sudo tar -zxvf allure-2.32.0.tgz -C /opt/ && sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure   
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4 
-       # Добавьте команду для проверки содержимого папки history
-      - name: Check contents of allure-results/history
-        run: ls -la allure-results/history
-        
-      - run: allure generate -c allure-results -o _site
+      - run: allure generate -c allure-results-history -o _site
       - name: Store generate report
         uses: actions/upload-artifact@v4
         with:
