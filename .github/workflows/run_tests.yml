@@ -67,7 +67,7 @@ jobs:
       - name: Store allure history
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-history
           path: 
             allure-results
           retention-days: 1
