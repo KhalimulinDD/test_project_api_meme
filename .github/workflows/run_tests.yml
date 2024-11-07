@@ -64,7 +64,7 @@ jobs:
         run: |
           # Проверка существования artifacts.zip
           if [[ -f "artifacts.zip" ]]; then
-              mkdir -p allure-results && unzip artifacts.zip -d allure-results
+              mkdir -p allure-results && unzip artifacts.zip -d allure-results || true
           else
               echo "artifacts.zip not found. Skipping this step."
           fi
