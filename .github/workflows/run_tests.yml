@@ -68,8 +68,28 @@ jobs:
           else
               echo "artifacts.zip not found. Skipping this step."
           fi
-      - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
-      - run: cp pages_history/history/* allure-results && cp -r pages_history/history allure-results 
+      - name: Unzip pages.zip if it exists
+        run: |
+          if [[ -f "pages.zip" ]]; then
+              mkdir -p old_pages pages_history && unzip pages.zip -d old_pages || true
+              if [[ -f "old_pages/artifact.tar" ]]; then
+                  tar -xvf old_pages/artifact.tar -C pages_history || true
+              else
+                  echo "artifact.tar not found in old_pages. Skipping tar extraction."
+              fi
+          else
+              echo "pages.zip not found. Skipping this step."
+          fi
+
+      - name: Copy history if it exists
+        run: |
+          if [[ -d "pages_history/history" ]]; then
+              mkdir -p allure-results
+              cp -r pages_history/history/* allure-results || true
+              cp -r pages_history/history allure-results || true
+          else
+              echo "pages_history/history directory not found. Skipping copy step."
+          fi
       
       - name: Store allure history
         uses: actions/upload-artifact@v4
